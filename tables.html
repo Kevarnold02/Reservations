@@ -16,8 +16,8 @@
             <h2 class="text-center">Current Reservations and Waiting List</h2>
             <br>
             <div class="text-center">
-                <a href="reservation_main.html"><button type="button" class="btn btn-lg btn-danger"><span class="glyphicon glyphicon-credit-card"></span> Make Reservation</button></a>
-                <a href="view_reservation.html"><button type="button" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-home"></span></button></a>
+                <a href="view.html"><button type="button" class="btn btn-lg btn-danger"><span class="glyphicon glyphicon-credit-card"></span> Make Reservation</button></a>
+                <a href="reserve.html"><button type="button" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-home"></span></button></a>
             </div>
         </div>
         <div class="row">
@@ -49,5 +49,44 @@
     </div>
 </body>
 <script type="text/javascript">
+ $(".submit").on("click", function(){
+
+    //Here we grab the form elements
+   var newReservation = {
+       customerName: $('#reserve_name').val().trim(),
+       phoneNumber: $('#reserve_phone').val().trim().replace(/-/g,""),
+       customerEmail: $('#reserve_email').val().trim(),
+       customerID: $('#reserve_uniqueID').val().trim()
+   };
+
+   console.log(newReservation);
+
+           var currentURL = window.location.origin;
+
+           $.post(currentURL + "/api/tables", newReservation,
+           function(data){
+
+                //If a table is available... tell user they are booked.
+               if(data == true){
+                   alert("Yay! You are officially booked!")
+               }
+
+                //If a table is available... tell user they on the waiting list.
+               if(data == false){
+                   alert("Sorry you are on the wait list")
+               }
+
+                //Clear the form when submitting
+               $('#reserve_name').val("");
+               $('#reserve_phone').val("");
+               $('#reserve_email').val("");
+               $('#reserve_uniqueID').val("");
+
+           });
+
+   return false;
+
+ });
+
 </script>
 </html>
